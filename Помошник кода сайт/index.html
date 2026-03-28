@@ -1,0 +1,179 @@
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8">
+<title>Java Reference</title><style>
+
+body{
+font-family:Arial;
+background:#111827;
+color:white;
+margin:0;
+padding:20px;
+}
+
+h1{
+text-align:center;
+}
+
+#menuBtn{
+position:fixed;
+top:15px;
+left:15px;
+font-size:30px;
+cursor:pointer;
+}
+
+#sidebar{
+position:fixed;
+top:0;
+left:-250px;
+width:250px;
+height:100%;
+background:#1f2937;
+padding:20px;
+transition:0.3s;
+}
+
+#sidebar button{
+display:block;
+width:100%;
+margin-top:10px;
+padding:10px;
+border:none;
+background:#2563eb;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+.searchBox{
+display:flex;
+gap:10px;
+margin-top:60px;
+}
+
+#search{
+flex:1;
+padding:10px;
+border-radius:6px;
+border:none;
+}
+
+button{
+padding:10px;
+border:none;
+border-radius:6px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+.word{
+background:#374151;
+padding:10px;
+margin:6px 0;
+border-radius:6px;
+cursor:pointer;
+}
+
+.info{
+margin-top:20px;
+background:#1f2937;
+padding:20px;
+border-radius:8px;
+display:none;
+}
+
+pre{
+background:black;
+padding:10px;
+border-radius:6px;
+}
+
+</style></head><body><div id="menuBtn" onclick="toggleMenu()">☰</div><div id="sidebar">
+<h2>Меню</h2>
+<button onclick="filterCategory('easy')">🟢 Лёгкие</button>
+<button onclick="filterCategory('hard')">🔴 Сложные</button>
+</div><h1>Java Reference</h1><div class="searchBox">
+<input id="search" placeholder="Введите слово например if">
+<button onclick="searchWords()">Найти</button>
+</div><div id="list"></div><div id="info" class="info"></div><script>
+
+const data = {
+
+"class":{level:"hard",desc:"Создает класс",code:"public class Person {}"},
+"public":{level:"easy",desc:"Доступен везде",code:"public int age;"},
+"private":{level:"easy",desc:"Только внутри класса",code:"private int pass;"},
+"static":{level:"hard",desc:"Принадлежит классу",code:"static int count;"},
+"void":{level:"easy",desc:"Ничего не возвращает",code:"void run(){}"},
+"int":{level:"easy",desc:"Целое число",code:"int x = 5;"},
+"if":{level:"easy",desc:"Условие",code:"if(x>0){}"},
+"else":{level:"easy",desc:"Иначе",code:"else{}"},
+"for":{level:"easy",desc:"Цикл",code:"for(int i=0;i<10;i++){}"},
+"while":{level:"easy",desc:"Цикл",code:"while(x>0){}"},
+"switch":{level:"hard",desc:"Выбор",code:"switch(x){}"},
+"try":{level:"hard",desc:"Обработка ошибок",code:"try{}catch(e){}"},
+"catch":{level:"hard",desc:"Ловит ошибку",code:"catch(e){}"},
+"finally":{level:"hard",desc:"Всегда выполняется",code:"finally{}"}
+};
+
+let currentCategory = "easy";
+
+let favorites = [];
+
+function toggleFavorite(word){
+
+if(favorites.includes(word)){
+    favorites = favorites.filter(w => w !== word);
+}else{
+    favorites.push(word);
+}
+
+alert("Избранное: " + favorites.join(", "));
+
+}
+
+function toggleMenu(){
+let menu=document.getElementById("sidebar");
+menu.style.left = (menu.style.left === "0px") ? "-250px" : "0px";
+}
+
+function showInfo(word){
+
+let info=document.getElementById("info");
+info.style.display="block";
+
+info.innerHTML=
+"<h2>"+word+"</h2>"+
+"<p>"+data[word].desc+"</p>"+
+"<pre>"+data[word].code+"</pre>"+
+"<button onclick='toggleFavorite(\""+word+"\")'>В избранное</button>";
+
+}
+
+function showInfo(word){
+let info=document.getElementById("info");
+info.style.display="block";
+info.innerHTML="<h2>"+word+"</h2><p>"+data[word].desc+"</p><pre>"+data[word].code+"</pre>";}
+
+function searchWords(){
+let text=document.getElementById("search").value.toLowerCase();
+let words=Object.keys(data);
+
+let filtered=words.filter(w=>
+data[w].level===currentCategory && w.includes(text)
+);
+
+showList(filtered);
+}
+
+function filterCategory(cat){
+currentCategory=cat;
+searchWords();
+}
+
+document.getElementById("search").addEventListener("input",searchWords);
+
+searchWords();
+
+</script></body>
+</html>
